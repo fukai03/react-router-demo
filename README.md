@@ -14,7 +14,7 @@ react-router主要分成了几个不同的包：
 
 ### React Router 6 和 5.x版本的区别
 1. 内置组件变化：移除`<Switch/>` ，新增`<Routes/>`等
-2. 语法的变化：component={About} 变为 element={<About/>}等。
+2. 语法的变化：`component={About}` 变为 `element={<About/>}`等。
 3. 新增多个hook：`useParams`、`useNavigate`、`useMatch`等
 4. 官方明确推荐函数式组件
 
@@ -89,7 +89,7 @@ interface NavigateProps {
 }
 ```
 7. [`<Outlet>`](https://reactrouter.com/en/6.11.1/components/outlet)
-   - 当`<Route>`产生嵌套时，渲染其对应的后续子路由
+   - 当`<Route>`产生嵌套时，渲染其对应的后续子路由, 类似于vue中的`<router-view>`
 
 ### 常用Hooks
 1. useRoutes
@@ -182,13 +182,14 @@ export default App
 ```
 3. useParams
    - 返回当前匹配路由的 `params` 参数
+   - 类似于5.x中的`this.props.match.params`
 4. useSearchParams
    - 用于读取和修改当前位置的 URL 中的查询字符串,返回一个包含两个值的数组，内容分别为：当前的seaech参数、更新search的函数
 
 5. useLocation
-   - 用于获取当前 location 信息, 对标5.x中的路由组件的location属性
+   - 用于获取当前 location 信息, 对标5.x中的路由组件的`location`属性
 6. useMatch
-   - 返回当前匹配信息，对标5.x中的路由组件的match属性。
+   - 返回当前匹配信息，对标5.x中的路由组件的`match`属性。
 **3-6代码示例**
 ```tsx
 // router参数配置
@@ -255,7 +256,8 @@ import React from 'react'
 import { useNavigationType } from 'react-router-dom'
 
 export default function About() {
-  // 调用 useNavigationType() hooks，可以获取当前路由是以那种跳转模式跳转过来的（PUSH、REPLACE）
+  // 调用 useNavigationType() hooks，可以获取当前路由是以那种跳转模式跳转过来的（PUSH、REPLACE, POP）
+  // 不通过路由跳转，刷新页面，返回的是POP
   console.log(useNavigationType());
   return (
     <div>
@@ -264,14 +266,17 @@ export default function About() {
   )
 }
 ```
+
 9. useOutlet
    - 用来呈现当前组件中渲染的嵌套路由
-   - 若当前组件中挂载有`<OutLet>`组件，则可用useOutlet获取嵌套路由对象，否则返回null
+   - 若当前组件中挂载有`<OutLet>`组件，则可用useOutlet获取嵌套路由对象，否则返回null（无嵌套路由或嵌套路由未挂载时）
+
+
 10. useResolvedPath
     - 给定一个 URL值，解析其中的：path、search、hash值。
 ```jsx
-  const resolvedPath = useResolvedPath('/about?search1=1&search2=2');
-  console.log('resolvedPath', resolvedPath);//resolvedPath {pathname: '/about', search: '?search1=1&search2=2', hash: ''}
+  const resolvedPath = useResolvedPath('/about?search1=1&search2=2#qwe');
+  console.log('resolvedPath', resolvedPath);//resolvedPath {pathname: '/about', search: '?search1=1&search2=2', hash: '#qwe'}
 ```
 
 
